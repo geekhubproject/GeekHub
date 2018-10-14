@@ -127,7 +127,16 @@ const genDocuments = (req, res) => {
     setInterval(callByYear, 5000);
 };
 
+const topStories = async (req, res) => {
+    const limit = (req.params.limit)?parseInt(req.params.limit):config.mediumApi.apiResults;
+    mediumEntry.find().sort({totalClapCount:-1}).limit(limit).exec(
+        (err, docs) => {
+            res.json({docs});
+        }
+    )
+};
+
 module.exports = {
-    // topStories,
+    topStories,
     genDocuments
 };

@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const github = require('../apps/github');
 
-/* GET users listing. */
-router.get('/git-top-stories', github.topStories);
-router.get('/git-gen-stories', github.genDocuments);
+router.get('/top-stories', github.topStories);
+router.get('/top-stories/:limit', github.topStories);
+router.get('/gen-stories', github.genDocuments);
 
 module.exports = router;

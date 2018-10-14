@@ -12,7 +12,8 @@ let error =false;
 let lastResult = null;
 
 const topStories = async (req, res) => {
-    gitEntry.find().sort({stars:-1}).limit(config.gitApi.guiResults).exec(
+    const limit = (req.params.limit)?parseInt(req.params.limit):config.gitApi.apiResults;
+    gitEntry.find().sort({stars:-1}).limit(limit).exec(
         (err, docs) => {
             res.json({docs});
         }
