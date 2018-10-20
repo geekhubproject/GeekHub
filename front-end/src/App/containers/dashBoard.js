@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import Tabs from '../common/components/tabs.js';
-import AppBar from '../common/components/appBar.js';
+import Tabs from '../components/tabs.js';
 import Grid from '@material-ui/core/Grid';
-import Card from '../common/components/card.js';
+import Card from '../components/card.js';
 
 class DashBoard extends Component {
   render() {
     return (
       <div className="DashBoard">
-        <AppBar />
         <Grid container style={{
           margin: 0,
           width: '100%',
