@@ -15,5 +15,22 @@
   "bugs": {
     "url": "https://github.com/appu7/GeekHub/issues"
   },
-  "homepage": "https://github.com/appu7/GeekHub#readme"
+  "homepage": "https://github.com/appu7/GeekHub#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "eslint": "^5.7.0",
+    "eslint-plugin-react": "^7.11.1",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.3.0",
+    "jsonwebtoken": "^8.3.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "rc": "^1.2.8",
+    "uuid": "^3.3.2",
+    "validador": "^0.1.6",
+    "validator": "^10.8.0"
+  }
 }
