@@ -14,7 +14,7 @@ class IconLabelTabs extends React.Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.props.clickHandler(event.target.innerText);
   };
 
   render() {
