@@ -12,3 +12,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.remove-anchor,.remove-anchor:link,.remove-anchor:visited,.remove-anchor:hover,
+.remove-anchor:focus,.remove-anchor:active{
+  color: inherit;
+  text-decoration: none;
+}
