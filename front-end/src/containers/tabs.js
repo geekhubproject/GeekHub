@@ -6,6 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { github , stackOverflow , medium } from 'react-icons-kit/fa/';
 import Icon from 'react-icons-kit';
+import types from '../actions/types';
+import compose from 'recompose/compose'
+import * as actions from '../actions/'
+import connect from 'react-redux/es/connect/connect';
 
 //Icon Label Tabs Component
 class IconLabelTabs extends React.Component {
@@ -14,7 +18,10 @@ class IconLabelTabs extends React.Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({
+      value
+    });
+    this.props.changeActive(event.target.innerText);
   };
 
   render() {
@@ -48,4 +55,16 @@ IconLabelTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(IconLabelTabs);
+
+const mapStateToProps = state => ({
+  active: state.active
+});
+
+const mapDispatchToProps = dispatch => ({
+	changeActive: (state) => dispatch(actions.activeState(state)),
+});
+
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps)
+)(IconLabelTabs);

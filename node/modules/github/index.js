@@ -11,7 +11,8 @@ let error =false;
 
 const topStories = async (req, res) => {
   const limit = (req.params.limit)?parseInt(req.params.limit):config.gitApi.apiResults;
-  db.find().sort({stars:-1}).limit(limit).exec(
+  const skip = (req.params.next)?parseInt(req.params.next):0;
+  db.find().sort({stars:-1}).skip(skip).limit(limit).exec(
     (err, docs) => {
       res.json({docs});
     }

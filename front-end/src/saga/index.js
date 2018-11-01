@@ -1,30 +1,72 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
-import axios from 'axios';
+import { takeLatest, takeEvery, call, put, select } from 'redux-saga/effects';
+import * as api from '../middleware/index';
+import * as actions from '../actions';
+import types from '../actions/types'
 
 // watcher saga: watches for actions dispatched to the store, starts worker saga
-export function* watcherSaga() {
-  yield takeLatest('API_CALL_REQUEST', workerSaga);
-}
-
-// function that makes the api request and returns a Promise for response
-function fetchData() {
-  return axios({
-    method: 'get',
-    url: 'http://localhost:3000/github/top-stories'
-  });
+export function* watcherSaga(type, data) {
+  yield takeLatest(types.GIT_REQUEST, gitWorkerSaga);
+	yield takeLatest(types.MEDIUM_REQUEST, mediumWorkerSaga);
+	yield takeEvery(types.NEXT_GIT_DATA, gitNextWorkerSaga);
+	yield takeEvery(types.NEXT_MEDIUM_DATA, mediumNextWorkerSaga);
 }
 
 // worker saga: makes the api call when watcher saga sees the action
-function* workerSaga() {
+function* gitWorkerSaga() {
   try {
-    const response = yield call(fetchData);
-    const data = response.data;
+    const response = yield call(api.gitFetch);
 
     // dispatch a success action to the store with the new dog
-    yield put({ type: 'API_CALL_SUCCESS', data });
+    yield put({ type: types.GIT_CALL_SUCCESS, data: response.data });
 
   } catch (error) {
     // dispatch a failure action to the store with the error
-    yield put({ type: 'API_CALL_FAILURE', error });
+    yield put({ type: types.GIT_CALL_FAILURE, error });
   }
+}
+
+	// worker saga: makes the api call when watcher saga sees the action
+function* mediumWorkerSaga() {
+  try {
+    const response = yield call(api.mediumFetch);
+
+    // dispatch a success action to the store with the new dog
+      yield put({ type: types.MEDIUM_CALL_SUCCESS, data: response.data });
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    yield put({ type: types.MEDIUM_CALL_FAILURE, error });
+  }
+}
+
+// worker saga: makes the api call when watcher saga sees the action
+function* gitNextWorkerSaga() {
+	try {
+		const response = yield call(api.gitNext);
+
+		const gitRecord = yield select(state => state.gitRecord);
+
+		// dispatch a success action to the store with the new dog
+		yield put({ type: types.RESULT_NEXT_GIT_DATA, data: response.data, gitRecord });
+
+	} catch (error) {
+		// dispatch a failure action to the store with the error
+		yield put({ type: types.GIT_CALL_FAILURE, error });
+	}
+}
+
+// worker saga: makes the api call when watcher saga sees the action
+function* mediumNextWorkerSaga() {
+	try {
+		const response = yield call(api.mediumNext);
+
+		const mediumRecord = yield select(state => state.mediumRecord);
+
+		// dispatch a success action to the store with the new dog
+		yield put({ type: types.RESULT_NEXT_MEDIUM_DATA, data: response.data, mediumRecord });
+
+	} catch (error) {
+		// dispatch a failure action to the store with the error
+		yield put({ type: types.MEDIUM_CALL_FAILURE, error });
+	}
 }

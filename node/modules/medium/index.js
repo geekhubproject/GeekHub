@@ -126,7 +126,8 @@ const genDocuments = (req, res) => {
 
 const topStories = async (req, res) => {
   const limit = (req.params.limit)?parseInt(req.params.limit):config.mediumApi.apiResults;
-  db.find().sort({totalClapCount:-1}).limit(limit).exec(
+	const skip = (req.params.next)?parseInt(req.params.next):0;
+  db.find().sort({totalClapCount:-1}).skip(skip).limit(limit).exec(
     (err, docs) => {
       res.json({docs});
     }
