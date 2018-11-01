@@ -19,3 +19,4 @@
 * Redis
 * Elastic Stack
 * ES6 compatibility in Node (Such as Require vs Import)
+* Whitelist hosts for cors

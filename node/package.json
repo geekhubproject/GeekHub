@@ -8,13 +8,19 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt": "^3.0.2",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "json-stringify-safe": "^5.0.1",
     "mongoose": "^5.3.2",
     "morgan": "~1.9.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "sleep": "^5.2.3",
+    "uuid": "^3.3.2",
     "validador": "^0.1.6"
   }
 }
