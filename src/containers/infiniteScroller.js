@@ -25,7 +25,6 @@ class Infinite_Scroller extends React.Component{
 	}
 	loadItems(){
 		let {items, items_rendered} = this.state;
-		debugger;
 		if(items_rendered < this.props.data.length){
 			items = items.concat(this.props.data.slice(items_rendered,items_rendered+this.props.items_to_render));
 			items_rendered +=  this.props.items_to_render;
