@@ -7,21 +7,25 @@ import connect from 'react-redux/es/connect/connect';
 class Infinite_Scroller extends React.Component{
 	constructor(props){
 		super(props);
+		this.totalItems = this.props.data.length;
 		this.state = {
 			items : [],
 			hasMoreItems : true,
 			items_rendered : 0,
 		}
 	}
-	componentWillReceiveProps(nextProps, nextContext){
-		this.setState({
-			items : [],
-			hasMoreItems : true,
-			items_rendered : 0,
-		});
+	shouldComponentUpdate(nextProps, nextState, nextContext){
+		if(this.totalItems < nextProps.data.length){
+			this.totalItems = nextProps.data.length;
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 	loadItems(){
 		let {items, items_rendered} = this.state;
+		debugger;
 		if(items_rendered < this.props.data.length){
 			items = items.concat(this.props.data.slice(items_rendered,items_rendered+this.props.items_to_render));
 			items_rendered +=  this.props.items_to_render;
@@ -29,7 +33,8 @@ class Infinite_Scroller extends React.Component{
 				items : items,
 				items_rendered : items_rendered
 			});
-			if((this.props.data.length - items_rendered) <= 10){
+			if((this.state.items.length - items_rendered) <= 0){
+				this.upgrade = true;
 				this.props.active === 'GITHUB'?
 					this.props.nextGitData()
 					:

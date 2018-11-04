@@ -15,19 +15,20 @@ const mediumFetch = () => {
 	});
 };
 
-const gitNext = () => {
+function gitNext(nextItems){
+	debugger;
 	return axios({
 		method: 'get',
-		url:`${conf.api.base}${conf.api.git.next}`
+		url:`${conf.api.base}${conf.api.git.next}/${nextItems}`
 	});
-};
+}
 
-const mediumNext = () => {
+function mediumNext(nextItems){
 	return axios({
 		method: 'get',
-		url:`${conf.api.base}${conf.api.medium.next}`
+		url:`${conf.api.base}${conf.api.medium.next}/${nextItems}`
 	});
-};
+}
 
 
 export {
