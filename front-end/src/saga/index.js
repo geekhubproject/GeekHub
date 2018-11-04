@@ -7,8 +7,8 @@ import types from '../actions/types'
 export function* watcherSaga(type, data) {
   yield takeLatest(types.GIT_REQUEST, gitWorkerSaga);
 	yield takeLatest(types.MEDIUM_REQUEST, mediumWorkerSaga);
-	yield takeLatest(types.NEXT_GIT_DATA, gitNextWorkerSaga);
-	yield takeLatest(types.NEXT_MEDIUM_DATA, mediumNextWorkerSaga);
+	yield takeEvery(types.NEXT_GIT_DATA, gitNextWorkerSaga);
+	yield takeEvery(types.NEXT_MEDIUM_DATA, mediumNextWorkerSaga);
 }
 
 // worker saga: makes the api call when watcher saga sees the action
@@ -44,7 +44,9 @@ function* gitNextWorkerSaga() {
 	try {
 		const gitRecord = yield select(state => state.gitRecord);
 
-		const response = yield call(api.gitNext.bind(null, gitRecord+40));
+		console.log("fetch", gitRecord);
+
+		const response = yield call(api.gitNext.bind(null, gitRecord));
 
 		// dispatch a success action to the store with the new dog
 		yield put({ type: types.RESULT_NEXT_GIT_DATA, data: response.data, gitRecord });

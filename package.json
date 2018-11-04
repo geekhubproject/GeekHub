@@ -30,7 +30,6 @@
     "passport-local": "^1.0.0",
     "rc": "^1.2.8",
     "uuid": "^3.3.2",
-    "validador": "^0.1.6",
     "validator": "^10.8.0"
   }
 }
