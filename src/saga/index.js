@@ -44,7 +44,7 @@ function* gitNextWorkerSaga() {
 	try {
 		const gitRecord = yield select(state => state.gitRecord);
 
-		const response = yield call(api.gitNext.bind(null, gitRecord+40));
+		const response = yield call(api.gitNext.bind(null, gitRecord));
 
 		// dispatch a success action to the store with the new dog
 		yield put({ type: types.RESULT_NEXT_GIT_DATA, data: response.data, gitRecord });
@@ -60,7 +60,7 @@ function* mediumNextWorkerSaga() {
 	try {
 		const mediumRecord = yield select(state => state.mediumRecord);
 
-		const response = yield call(api.mediumNext.bind(null, mediumRecord+50));
+		const response = yield call(api.mediumNext.bind(null, mediumRecord));
 
 		// dispatch a success action to the store with the new dog
 		yield put({ type: types.RESULT_NEXT_MEDIUM_DATA, data: response.data, mediumRecord });
