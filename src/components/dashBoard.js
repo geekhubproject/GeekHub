@@ -61,11 +61,11 @@ class DashBoard extends Component {
 	}
 	render() {
 		let renderData;
-		if(this.props.active === 'GITHUB' && this.props.gitData){
-			renderData = this.props.gitLoaded?gitHubItems(this.props.gitData):null;
-		}
-		else if(this.props.mediumData){
+		if(this.props.active === 'MEDIUM' && this.props.mediumData){
 			renderData = this.props.mediumLoaded?mediumItems(this.props.mediumData):null;
+		}
+		else if(this.props.active === 'GITHUB' && this.props.gitData) {
+			renderData = this.props.gitLoaded ? gitHubItems(this.props.gitData) : null;
 		}
 		return (
 			<div className="DashBoard">
@@ -82,7 +82,7 @@ class DashBoard extends Component {
 							<div style={{width:"100%"}}>
 								<InfiniteScroller
 									data = {renderData}
-									items_to_render = {5}
+									items_to_render = {40}
 								/>
 							</div>
 							:

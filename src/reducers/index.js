@@ -22,7 +22,7 @@ const gitReducer = (state = initialState, action) => {
 			return { ...state, fetching: false, gitData: action.data.docs, gitLoaded: true, gitError: null, gitRecord: 50};
 		case actions.RESULT_NEXT_GIT_DATA:
 			return {...state, fetching: false, gitData: state.gitData.concat(action.data.docs),
-				gitRecord: state.gitRecord + 50, gitLoaded: true, gitError: null};
+				gitRecord: state.gitRecord + 40, gitLoaded: true, gitError: null};
 		case actions.GIT_CALL_FAILURE:
 			return { ...state, fetching: false, gitData: null, gitError: action.error, gitLoaded: false };
 		case actions.MEDIUM_REQUEST:
