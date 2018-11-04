@@ -16,7 +16,6 @@ const mediumFetch = () => {
 };
 
 function gitNext(nextItems){
-	debugger;
 	return axios({
 		method: 'get',
 		url:`${conf.api.base}${conf.api.git.next}/${nextItems}`
