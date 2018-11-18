@@ -1,6 +1,5 @@
-import { takeLatest, takeEvery, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 import * as api from '../middleware/index';
-import * as actions from '../actions';
 import types from '../actions/types'
 
 // watcher saga: watches for actions dispatched to the store, starts worker saga

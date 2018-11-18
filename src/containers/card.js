@@ -8,14 +8,13 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 // Media card Functional Component
-function MediaCard(props) {
+function CustomCard(props) {
 	return (
 		<a href={props.link} className="remove-anchor">
 			<Card style={{width:"100%"}}>
 				<CardActionArea style={{width:"100%"}}>
 					<CardContent >
-						<Typography align="left" gutterBottom variant="h5" component="h2"
-						>
+						<Typography align="left" gutterBottom variant="h5" component="h2">
 							{props.title}
 						</Typography>
 						<Typography align="left" component="p">
@@ -40,8 +39,8 @@ const styles = {
 	}
 };
 
-MediaCard.propTypes = {
+Card.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MediaCard);
+export default withStyles(styles)(CustomCard);

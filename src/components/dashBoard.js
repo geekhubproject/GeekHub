@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import Tabs from '../containers/tabs.js';
+import Tabs from '../containers/Tabs.js';
 import Grid from '@material-ui/core/Grid';
-import Card from '../containers/card.js';
-import InfiniteScroller from '../containers/infiniteScroller'
+import Card from '../containers/Card.js';
+import InfiniteScroller from '../containers/InfiniteScroller'
 import Loader from 'react-loading';
 import { star } from 'react-icons-kit/oct/star';
 import { repoForked } from 'react-icons-kit/oct/repoForked';
 import { ic_check_circle } from 'react-icons-kit/md/ic_check_circle'
 import { ic_schedule } from 'react-icons-kit/md/ic_schedule'
 import Icon from 'react-icons-kit';
-import * as actions from '../actions';
 import types from '../actions/types'
 import { Button } from '../common';
-
+import LoginForm from './LoginForm';
 
 const GitHubStats = (props) => (
 		<div>
@@ -61,6 +60,7 @@ class DashBoard extends Component {
 		this.props.fetchMediumData();
 	}
 	render() {
+		console.log(this.props)
 		let renderData;
 		if(this.props.active === 'MEDIUM' && this.props.mediumData){
 			renderData = this.props.mediumLoaded?mediumItems(this.props.mediumData):null;
@@ -79,6 +79,7 @@ class DashBoard extends Component {
 					<Button text="Login" />
 					<Button text="Sign Up" />
 				</Grid>
+				<LoginForm />
 				<Grid container style={{
 					margin: 0,
 					width: '100%',
@@ -106,16 +107,16 @@ class DashBoard extends Component {
 
 
 const mapStateToProps = state => ({
-		fetching: state.fetching,
-		gitData: state.gitData,
-		gitError: state.gitError,
-		mediumData: state.mediumData,
-		mediumError: state.mediumError,
-		gitLoaded: state.gitLoaded,
-		mediumLoaded: state.mediumLoaded,
-		active: state.active,
-		gitRecord: state.gitRecord,
-		mediumRecord: state.mediumRecord,
+		fetching: state.gitReducer.fetching,
+		gitData: state.gitReducer.gitData,
+		gitError: state.gitReducer.gitError,
+		mediumData: state.mediumReducer.mediumData,
+		mediumError: state.mediumReducer.mediumError,
+		gitLoaded: state.gitReducer.gitLoaded,
+		mediumLoaded: state.mediumReducer.mediumLoaded,
+		active: state.utilReducer.active,
+		gitRecord: state.gitReducer.gitRecord,
+		mediumRecord: state.mediumReducer.mediumRecord,
 });
 
 const mapDispatchToProps = dispatch => ({

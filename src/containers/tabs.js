@@ -6,7 +6,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { github , stackOverflow , medium } from 'react-icons-kit/fa/';
 import Icon from 'react-icons-kit';
-import types from '../actions/types';
 import compose from 'recompose/compose'
 import * as actions from '../actions/'
 import connect from 'react-redux/es/connect/connect';
