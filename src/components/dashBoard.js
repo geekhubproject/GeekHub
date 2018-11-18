@@ -12,6 +12,7 @@ import { ic_schedule } from 'react-icons-kit/md/ic_schedule'
 import Icon from 'react-icons-kit';
 import * as actions from '../actions';
 import types from '../actions/types'
+import { Button } from '../common';
 
 
 const GitHubStats = (props) => (
@@ -69,6 +70,15 @@ class DashBoard extends Component {
 		}
 		return (
 			<div className="DashBoard">
+				<Grid container alignItems="flex-end" direction="row-reverse"
+					style={{
+						margin: 0,
+						width: '100%',
+						padding:20
+				}}>
+					<Button text="Login" />
+					<Button text="Sign Up" />
+				</Grid>
 				<Grid container style={{
 					margin: 0,
 					width: '100%',
