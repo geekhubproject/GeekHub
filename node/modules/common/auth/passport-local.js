@@ -23,6 +23,7 @@ passport.use(new LocalStrategy({
         }
       }
       catch (e) {
+        console.log(e);
         return e;
       }
     }).catch(done);
