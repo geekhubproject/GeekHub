@@ -68,7 +68,3 @@ typings/
 
 # next.js build output
 .next
-
-.eslintrc.json
-modules/stack-overflow/schema.js
-modules/user/notes_shema.js
