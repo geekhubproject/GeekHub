@@ -9,18 +9,15 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
 }, (username, password, done) => {
   Users.findOne({ username })
-    .then(async (user) => {
+    .then(async (userData) => {
       try {
-        if(user){
-          const verify = await hash.verifyHash(password, user.password);
-          if(verify)
-          {
-            return done(null, user);
-          }
-          else{
-            return done(null, false, { errors: { 'email or password': 'is invalid'}});
-          }
+        if(userData) {
+          const {password: userPassword, ...user} = {...userData.toObject()};
+          const verify = await hash.verifyHash(password, userPassword);
+          if (verify) return done(null, user);
+          else return done(null, false, {errors: 'Invalid password'});
         }
+        else return done(null, false, { errors:'User doesn\'t exist'});
       }
       catch (e) {
         console.log(e);
@@ -29,3 +26,15 @@ passport.use(new LocalStrategy({
     }).catch(done);
 }));
 
+// tell passport how to serialize the user
+passport.serializeUser((user, done) => {
+  console.log('Inside serializeUser callback. User id is save to the session id in mongo here');
+  done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  console.log('Inside deserializeUser callback');
+  console.log(`The user id passport saved in the session file store is: ${id}`);
+  const user = await Users.findOne({_id:id}, {password:0});
+  done(null, user);
+});

@@ -1,44 +1,36 @@
-const config = require('../../config');
-const uuidv4 = require('uuid/v4');
 const hash = require('../common/auth/bcrypt');
 const Users = require('./schema');
 const Medium = require('../medium/schema');
 const GitHub = require('../github/schema');
 const Notes = require('./notes_shema');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const login = (req, res) => {
-  passport.authenticate('local', { session: false },
+  passport.authenticate('local',
     (error, user, info) => {
-      if (error || !user)
-        res.status(400).json(info);
-      else{
-        const payload = {
-          username: user.username,
-          expires: Date.now() + config.jwt.expires,
-        };
+      if (error || !user) res.status(400).json(info);
 
-        /** assigns payload to req.user */
-        req.login(payload, {session: false}, (error) => {
-          if (error) {
-            res.status(400).send({error});
-          }
-          const token = jwt.sign(JSON.stringify(payload), config.jwt.secret);
-
-          /** assign our jwt to the cookie */
-          res.cookie('jwt', token, {httpOnly: true, secure: true});
-          res.status(200).json({token});
-        });
-      }
+      /** assigns payload to req.user */
+      req.login(user, (error) => {
+        if (error) {
+          res.status(400).json({error});
+        }
+        res.sendStatus(200);
+      });
     }
   )(req, res);
 };
 
+const logout = (req, res) => {
+  req.logout();
+  res.sendStatus(200);
+};
+
 const profile = (req, res) => {
-  const { user } = req;
-  res.status(200).send({ user });
+  res.status(200).json(req.user);
 };
 
 const register = async (req, res) => {
@@ -56,7 +48,6 @@ const register = async (req, res) => {
     res.json('Sign up successful');
   }
   catch (e) {
-    console.log(e);
     res.send('form should have all the properties');
   }
 };
@@ -80,73 +71,37 @@ const validateUser = async (username, password) => {
 };
 
 
-const updateBookmark = async (model, info, callback) => {
-  const {action, type, username, id} = {...info};
-  let result = '';
+const updateBookmark = async (Model, info) => {
+  const {action, type, user, id} = {...info};
+  let bookmarks = [];
   if(action === 'delete'){
-    result =  await model.findById(id, function(err, doc) {
-      if(!err){
-        Users.findOne({username},{password:0}, function(err, record) {
-          if(err){
-            callback(null);
-          }
-          const index = _.findIndex(record.bookmarks, {type, id});
-          if(index >= 0){
-            record.bookmarks = _.filter(record.bookmarks, data =>
-              data.id !== record.bookmarks[index].id
-            );
-            record.save();
-            callback(record);
-          }
-          else{
-            callback(null);
-          }
-        });
-      }
-      else{
-        callback(null);
-      }
-    });
+    const index = _.findIndex(user.bookmarks, {type, id});
+    if(index >= 0){
+      bookmarks = _.filter(user.bookmarks, data =>
+        data.id !== user.bookmarks[index].id
+      );
+    }
+    else return false;
   }
   else if(action === 'add'){
-    await model.findById(id, function(err, doc) {
-      if(!err){
-        Users.findOne({username},{password:0}, function(err, record) {
-          if(err) {
-            callback(null);
-          }
-          else{
-            if((_.findIndex(record.bookmarks, {type, id})) === -1){
-              record.bookmarks.push({type, id});
-              record.save();
-              callback(record);
-            }
-            else{
-              callback(null);
-            }
-          }
-        });
-      }
-      else{
-        callback(null);
-      }
-    });
+    user.bookmarks.push({type, id});
+    bookmarks = user.bookmarks;
   }
+  await Users.findByIdAndUpdate(user._id, { bookmarks });
+  return true;
 };
 
 
 const bookmark = async (req, res) => {
   let model = GitHub;
   if(req.body.type === 'medium') model = Medium;
-  await updateBookmark(model, req.body, (record)=> {
-    if(!record) res.sendStatus(404);
-    else res.status(200).json({status:200, record});
-  });
+  const result = await updateBookmark(model, {user:req.user,...req.body});
+  if(result) res.sendStatus(200);
+  else res.sendStatus(400);
 };
 
 const getBookmarks = async (req, res) => {
-  let bookmarks = await Users.findOne({username:req.params.username}, 'bookmarks');
-  bookmarks = JSON.parse(JSON.stringify(bookmarks.bookmarks)  );
+  const bookmarks = req.user.bookmarks;
   let gitBookmarks =  [];
   let mediumBookmarks = [];
   bookmarks.map(bookmark => {
@@ -165,7 +120,7 @@ const createNote = (req, res) => {
     data: req.body.data
   });
   note.save((err, doc) => {
-    Users.findOne({username:req.body.username}, (err, user) => {
+    Users.findById(req.user._id, (err, user) => {
       user.notes.push(doc.id);
       user.save();
       res.json({status:201, result:user});
@@ -174,12 +129,12 @@ const createNote = (req, res) => {
 };
 
 const editNote = (req, res) => {
-  const {username, title, data, id} = req.body;
-  Users.findOne({$and:[{username},{notes:{'$in':id}}]}, {password:0}, (err, doc) => {
+  const {id, ...updateInfo} = req.body;
+  Users.findOne({$and:[{_id:req.user._id}, {notes:{'$in':id}}]}, {password:0}, (err, doc) => {
     if(!err){
-      Notes.findOneAndUpdate({_id:id}, {title, data}, (err, record) => {
+      Notes.findByIdAndUpdate(id, {...updateInfo}, (err) => {
         if(!err){
-          res.status(200).json({status:200, msg:'Updated'});
+          res.sendStatus(200);
         }
         else{
           res.sendStatus(400);
@@ -192,22 +147,32 @@ const editNote = (req, res) => {
   });
 };
 
-const listNotes = (req, res) => {
-  Users.findOne({username:req.params.username}, (err, user) => {
-    let notes = user.notes;
-    Notes.find({_id:{'$in':notes}}, (err, docs) => {
-      res.json({notes: docs});
-    });
-  });
+const listNotes = async (req, res) => {
+  const notes = await Notes.find({_id:{'$in':req.user.notes}});
+  res.status(200).json({notes});
+};
+
+const deleteNote = async (req, res) => {
+  const user = req.user;
+  const id = req.params.id;
+  const index = user.notes.find(note => true);
+  if(index){
+    const notes = _.filter(user.notes, note => note !== id);
+    await Users.findByIdAndUpdate(user._id, {notes});
+    res.sendStatus(200);
+  }
+  else res.sendStatus(404);
 };
 
 module.exports = {
   login,
+  logout,
   profile,
   register,
   bookmark,
   getBookmarks,
   createNote,
   listNotes,
-  editNote
+  editNote,
+  deleteNote
 };

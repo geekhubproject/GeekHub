@@ -13,4 +13,5 @@ mongoose.connect(`mongodb://${config.mongodb.server}/${config.mongodb.db}`, {
     console.log(e);
   });
 
+module.exports = mongoose;
 

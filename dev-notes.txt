@@ -23,3 +23,16 @@ https://github.com/i0natan/nodebestpractices
     https://restfulapi.net/http-status-codes/
 
 
+
+//Establish session in nodeJS
+
+https://medium.com/@evangow/server-authentication-basics-express-sessions-passport-and-curl-359b7456003d
+
+    - dependencies:
+        https://www.npmjs.com/package/express-session
+            (Default: Uses Node Memory store should be used only for development/Experimental urpose)
+        https://www.npmjs.com/package/connect-mongo
+            (Replacement for Node Memory store uses MongoDB for session storage at server side)
+
+
+

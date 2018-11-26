@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const routes = require('./index');
-const passport = require('passport');
+const middleware  = require('./middleware');
+const {authenticate} = middleware;
 
 router.post('/login', routes.login);
-router.get('/profile/', passport.authenticate('jwt', {session: false}), routes.profile);
-router.post('/register', routes.register);
-router.put('/bookmark', routes.bookmark);
-router.get('/bookmark/:username', routes.getBookmarks);
-router.post('/note', routes.createNote);
-router.get('/note/:username', routes.listNotes);
-router.put('/note', routes.editNote);
+router.delete('/logout', routes.logout);
+router.get('/profile', authenticate, routes.profile);
+router.post('/register', authenticate, routes.register);
+router.put('/bookmark', authenticate, routes.bookmark);
+router.get('/bookmark', authenticate, routes.getBookmarks);
+router.post('/note', authenticate, routes.createNote);
+router.get('/note', authenticate, routes.listNotes);
+router.put('/note', authenticate, routes.editNote);
+router.delete('/note/:id', authenticate, routes.deleteNote);
 
 module.exports = router;
