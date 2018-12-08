@@ -1,30 +1,20 @@
 <template>
-  <v-app app>
-    <v-content>
-      <Dashboard/>
-    </v-content>
-  </v-app>
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
 <script>
-import Dashboard from "./components/Dashboard";
-
 export default {
-  name: "App",
-  components: {
-    Dashboard
-  },
-  data() {
-    return {
-      config: {
-        events: {
-          "froalaEditor.initialized": function() {
-            console.log("initialized");
-          }
-        }
-      },
-      model: "Edit Your Content Here!"
-    };
-  }
-};
+  name: 'App'
+}
 </script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50
+}
+</style>
