@@ -1,1 +1,1 @@
-# [GeekHub](https://geekub.herokuapp.com/)
+# [GeekHub](https://geek-hub.herokuapp.com/)
