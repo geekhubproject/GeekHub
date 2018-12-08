@@ -25,14 +25,17 @@ app.use(session({
     console.log(req.sessionID);
     return uuid(); // use UUIDs for session IDs
   },
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  store: new MongoStore({ mongooseConnection: mongoose.connection , ttl: 24 * 60 * 60}),
   secret: 'keyboard cat',
-  resave: false,
+  resave: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  },
   saveUninitialized: true,
 }));
 
 app.use(logger('dev'));
-app.use(cors({credentials: true}));
+app.use(cors({origin: 'https://geekhub-node.herokuapp.com/', credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
