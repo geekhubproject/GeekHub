@@ -12,7 +12,6 @@ const login = (req, res) => {
   passport.authenticate('local',
     (error, user, info) => {
       if (error || !user) res.status(400).json(info);
-
       /** assigns payload to req.user */
       req.login(user, (error) => {
         if (error) {
@@ -123,7 +122,10 @@ const createNote = (req, res) => {
     Users.findById(req.user._id, (err, user) => {
       user.notes.push(doc.id);
       user.save();
-      res.json({status:201, result:user});
+      doc = doc.toObject();
+      doc.id = doc._id;
+      delete doc._id;
+      res.status(200).json({data: doc});
     });
   });
 };
@@ -148,7 +150,13 @@ const editNote = (req, res) => {
 };
 
 const listNotes = async (req, res) => {
-  const notes = await Notes.find({_id:{'$in':req.user.notes}});
+  let notes = await Notes.find({_id:{'$in':req.user.notes}});
+  notes = notes.map(note => {
+    note = note.toObject();
+    note.id = note._id;
+    delete note._id;
+    return note;
+  });
   res.status(200).json({notes});
 };
 
@@ -164,6 +172,13 @@ const deleteNote = async (req, res) => {
   else res.sendStatus(404);
 };
 
+const uploadImage = async (req, res) => {
+  const image = {};
+  image.url = req.file.url;
+  image.id = req.file.public_id;
+  res.json({link:image.url});
+};
+
 module.exports = {
   login,
   logout,
@@ -174,5 +189,6 @@ module.exports = {
   createNote,
   listNotes,
   editNote,
-  deleteNote
+  deleteNote,
+  uploadImage
 };
