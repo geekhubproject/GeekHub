@@ -35,7 +35,7 @@ app.use(session({
 }));
 
 app.use(logger('dev'));
-app.use(cors({origin: 'https://geekhub-node.herokuapp.com/', credentials: true}));
+app.use(cors({origin: 'https://geek-hub.herokuapp.com/', credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
