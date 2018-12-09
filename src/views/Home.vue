@@ -114,7 +114,4 @@ export default {
   .adopt-sticky {
     z-index: 0
   }
-  .fr-wrapper > div:first-child {
-    display: none;
-  }
 </style>
