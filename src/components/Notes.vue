@@ -196,9 +196,4 @@ export default {
   .fr-box {
     z-index: 0;
   }
-  a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysiwyg-editor?k=u"] {
-    display: none !important;
-    position: absolute;
-    top: -99999999px;
-  }
 </style>
