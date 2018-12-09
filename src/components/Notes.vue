@@ -95,6 +95,7 @@
 import { mapGetters } from 'vuex'
 import NotePreview from './NotePreview.vue'
 import {UPDATE_NOTE, CREATE_NOTE, DELETE_NOTE} from '../store/action.types'
+import { API_URL } from '@/common/config'
 
 export default {
   name: 'Notes',
@@ -106,7 +107,7 @@ export default {
       config: {
         placeholder: 'Edit Me',
         editorClass: 'vue-editor',
-        imageUploadURL: 'http://localhost:3000/user/image',
+        imageUploadURL: `${API_URL}/user/image`,
         imageUploadParam: 'image',
         imageUploadParams: {
           name: 'image'
