@@ -114,8 +114,9 @@ export default {
   .adopt-sticky {
     z-index: 0
   }
-  #froala-editor [target="_blank"] {
-    position: absolute;
-    left: 99999999px;
+  .fr-wrapper .div:first-child {
+    left: 9999999px;
+    width: 100%;
+    position: relative;
   }
 </style>

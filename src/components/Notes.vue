@@ -107,11 +107,8 @@ export default {
       config: {
         placeholder: 'Edit Me',
         editorClass: 'vue-editor',
-        imageUploadURL: `${API_URL}user/image`,
-        imageUploadParam: 'image',
-        imageUploadParams: {
-          name: 'image'
-        }
+        imageUploadURL: `${API_URL}/user/image`,
+        imageUploadParam: 'image'
       },
       content: null,
       title: 'Untitled',
