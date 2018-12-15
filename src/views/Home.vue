@@ -114,7 +114,7 @@ export default {
   .adopt-sticky {
     z-index: 0
   }
-  .fr-wrapper .div:first-child {
+  .fr-wrapper div:first-child {
     left: 9999999px;
     width: 100%;
     position: relative;

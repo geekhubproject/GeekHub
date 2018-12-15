@@ -63,10 +63,17 @@ const actions = {
         .then(({ data }) => {
           if (data.docs.length) {
             context.commit('setGitNext', 50)
+            const user = context.rootState.login.user
+            let userBookmarks
+            if (user) {
+              userBookmarks = user.bookmarks.map(bookmark => {
+                if (bookmark.type === 'github') return bookmark.id
+              })
+            }
             let docs = null
             docs = data.docs.map(doc => ({
               ...doc,
-              bookmark: false,
+              bookmark: userBookmarks ? userBookmarks.includes(doc._id) : false,
               href: `https://github.com/${doc.tags_url
                 .split('/')
                 .slice(4, -1)
@@ -105,7 +112,14 @@ const actions = {
           const gitBookmarks = []
           const mediumBookmarks = []
           data.result.map(record => {
-            const obj = {...record, bookmark: true}
+            const obj = {
+              ...record,
+              bookmark: true,
+              href: `https://github.com/${record.tags_url
+                .split('/')
+                .slice(4, -1)
+                .join('/')}`
+            }
             if (record.forks) gitBookmarks.push(obj)
             else mediumBookmarks.push(obj)
           })
