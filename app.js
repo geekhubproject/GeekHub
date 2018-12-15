@@ -8,14 +8,11 @@ const session = require('express-session');
 const uuid = require('uuid/v4');
 const MongoStore = require('connect-mongo')(session);
 
-const indexRouter = require('./modules/stack-overflow/routes');
 const gitRouter = require('./modules/github/routes');
 const mediumRouter = require('./modules/medium/routes');
 const userRouter = require('./modules/user/routes');
 
 const mongoose = require('./models/mongodb/connect');
-const passportLocal = require('./modules/common/auth/passport-local');
-const passportJWT = require('./modules/common/auth/passport-jwt');
 
 const app = express();
 
@@ -35,7 +32,7 @@ app.use(session({
 }));
 
 app.use(logger('dev'));
-app.use(cors({origin: 'https://geek-hub.herokuapp.com', credentials: true}));
+app.use(cors({origin: ['https://geek-hub.herokuapp.com', 'http://localhost:8080'], credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

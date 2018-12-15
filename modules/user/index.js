@@ -6,7 +6,6 @@ const Notes = require('./notes_shema');
 const passport = require('passport');
 const _ = require('lodash');
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 
 const login = (req, res) => {
   passport.authenticate('local',
@@ -17,7 +16,7 @@ const login = (req, res) => {
         if (error) {
           res.status(400).json({error});
         }
-        res.sendStatus(200);
+        res.status(200).json(req.user);
       });
     }
   )(req, res);
@@ -132,7 +131,7 @@ const createNote = (req, res) => {
 
 const editNote = (req, res) => {
   const {id, ...updateInfo} = req.body;
-  Users.findOne({$and:[{_id:req.user._id}, {notes:{'$in':id}}]}, {password:0}, (err, doc) => {
+  Users.findOne({$and:[{_id:req.user._id}, {notes:{'$in':id}}]}, {password:0}, (err) => {
     if(!err){
       Notes.findByIdAndUpdate(id, {...updateInfo}, (err) => {
         if(!err){
@@ -163,7 +162,7 @@ const listNotes = async (req, res) => {
 const deleteNote = async (req, res) => {
   const user = req.user;
   const id = req.params.id;
-  const index = user.notes.find(note => true);
+  const index = user.notes.find(note => note === id);
   if(index){
     const notes = _.filter(user.notes, note => note !== id);
     await Users.findByIdAndUpdate(user._id, {notes});

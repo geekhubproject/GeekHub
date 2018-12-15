@@ -19,13 +19,13 @@ const getLimits = (data) => {
                 prepareDocuments(res);
               })
               .catch(e => {
-                console.log('error');
+                console.log('error', e);
               });
           }
         });
       })
       .catch(e => {
-        console.log('limits');
+        console.log('limits', e);
       });
   });
   // error.pop()
@@ -55,7 +55,7 @@ const reqApi = async (year, month=null, day=null) => {
 
 const insertData = (data) => {
   // sleep.msleep(200);
-  db.insertMany(data, {ordered:false}, (err, res) => {
+  db.insertMany(data, {ordered:false}, (err) => {
     if(err){
       console.log('db error');
       // return Promise.reject()
@@ -69,8 +69,8 @@ const insertData = (data) => {
 const prepareDocuments = (res) => {
   const data = JSON.parse(res.data.split('])}while(1);</x>')[1]);
   let docs = [];
-  keys = {...data.payload.references.Post};
-  for(key in keys) {
+  const keys = {...data.payload.references.Post};
+  for(const key in keys) {
     try {
       docs.push({
         // _id:keys[key].id,
@@ -85,10 +85,10 @@ const prepareDocuments = (res) => {
       });
     }
     catch (e) {
-      console.log('error');
+      console.log('error', e);
     }
   }
-  if(docs.length > 0)
+  if(docs.length)
     insertData(docs);
 };
 
@@ -113,7 +113,7 @@ const callByYear = () => {
           return false;
         })
         .catch(e=>{
-          console.log('error overall');
+          console.log('error overall', e);
           return true;
         });
     });
@@ -126,7 +126,7 @@ const genDocuments = (req, res) => {
 
 const topStories = async (req, res) => {
   const limit = (req.params.limit)?parseInt(req.params.limit):config.mediumApi.apiResults;
-	const skip = (req.params.next)?parseInt(req.params.next):0;
+  const skip = (req.params.next)?parseInt(req.params.next):0;
   db.find().sort({totalClapCount:-1}).skip(skip).limit(limit).exec(
     (err, docs) => {
       res.json({docs});
