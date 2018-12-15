@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const Users = require('../../user/schema');
@@ -20,7 +19,7 @@ passport.use(new LocalStrategy({
         else return done(null, false, { errors:'User doesn\'t exist'});
       }
       catch (e) {
-        console.log(e);
+        console.log('error at passport', e);
         return e;
       }
     }).catch(done);

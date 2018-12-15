@@ -10,7 +10,7 @@ mongoose.connect(`mongodb://${config.mongodb.server}/${config.mongodb.db}`, {
     console.log(`mongodb ${config.mongodb.db} connected`);
   })
   .catch(e => {
-    console.log(e);
+    console.log('DB connection error', e);
   });
 
 module.exports = mongoose;
