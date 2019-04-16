@@ -23,7 +23,7 @@ app.use(session({
     console.log(req.sessionID);
     return uuid(); // use UUIDs for session IDs
   },
-  store: new MongoStore({ mongooseConnection: mongoose.connection , ttl: 24 * 60 * 60}),
+  store: new MongoStore({ mongooseConnection: mongoose.connection , ttl: 24 * 60 * 60 * 1000}),
   secret: 'keyboard cat',
   resave: true,
   cookie: {
