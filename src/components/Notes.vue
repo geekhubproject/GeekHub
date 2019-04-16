@@ -103,6 +103,7 @@ export default {
     NotePreview
   },
   data () {
+    setTimeout(this.saveNote, 15000);
     return {
       config: {
         placeholder: 'Edit Me',
