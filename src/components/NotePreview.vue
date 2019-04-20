@@ -54,5 +54,8 @@ export default {
 .note-preview {
   min-height: 100vh;
   padding: 32px;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1;
 }
 </style>
