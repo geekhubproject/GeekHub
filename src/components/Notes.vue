@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="adopt-sticky" style="position: absolute; width: 100%">
+    <div class="adopt-sticky" v-bind:class="{ editmode: editMode }" style="position: inherit; width: 100%">
       <div v-if="editor">
         <v-btn fab dark fixed bottom right class="mb-3" @click="toggleEditor"
                color="indigo accent-2">
@@ -199,5 +199,8 @@ export default {
   }
   .fr-box {
     z-index: 0;
+  }
+  .editmode {
+    position: absolute !important;
   }
 </style>

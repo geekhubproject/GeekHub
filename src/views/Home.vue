@@ -83,6 +83,10 @@ export default {
     color: inherit;
     text-decoration: none;
   }
+  .v-toolbar {
+    position: sticky;
+    top: 0;
+  }
   .rotate-icon {
     transform: rotate(180deg);
   }
