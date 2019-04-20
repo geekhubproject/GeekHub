@@ -84,8 +84,8 @@ export default {
     text-decoration: none;
   }
   .v-toolbar {
-    position: sticky;
-    top: 0;
+    position: sticky !important;
+    top: 0 !important;
   }
   .rotate-icon {
     transform: rotate(180deg);
