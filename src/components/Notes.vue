@@ -103,7 +103,6 @@ export default {
     NotePreview
   },
   data () {
-    setTimeout(this.saveNote, 15000);
     return {
       config: {
         placeholder: 'Edit Me',
@@ -121,7 +120,8 @@ export default {
       snackbar: false,
       preview: false,
       previewTitle: null,
-      previewData: null
+      previewData: null,
+      timerTask: null
     }
   },
   computed: {
@@ -134,6 +134,11 @@ export default {
       this.id = null
       this.title = 'Untitled'
       this.content = null
+      if (this.editor) this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10)
+      else {
+        clearInterval(this.timerTask)
+        this.timerTask = null
+      }
     },
     editNote (title, data, id) {
       this.content = data
@@ -141,6 +146,7 @@ export default {
       this.editMode = true
       this.editor = true
       this.id = id
+      this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10)
     },
     clearNote () {
       this.content = null
