@@ -23,7 +23,7 @@ app.use(session({
     console.log(req.sessionID);
     return uuid(); // use UUIDs for session IDs
   },
-  store: new MongoStore({ mongooseConnection: mongoose.connection , ttl: 24 * 60 * 60 * 1000}),
+  store: new MongoStore({mongooseConnection: mongoose.connection, ttl: 24 * 60 * 60 * 1000}),
   secret: 'keyboard cat',
   resave: true,
   cookie: {
@@ -33,14 +33,16 @@ app.use(session({
 }));
 
 app.use(logger('dev'));
-app.use(cors({origin: ['https://geek-hub.herokuapp.com', 'http://localhost:8080'], credentials: true}));
+app.use(cors({
+  origin: ['http://geek-hub.herokuapp.com', 'https://geek-hub.herokuapp.com', 'http://localhost:8080'],
+  credentials: true
+}));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 
 // app.use('/', indexRouter);
