@@ -36,7 +36,7 @@
 </template>
 <script>
 
-import { BOOKMARK } from '../store/action.types'
+import { BOOKMARK } from '../store/action.types';
 
 export default {
   name: 'Github',
@@ -50,11 +50,11 @@ export default {
       this.$store
         .dispatch('home/' + BOOKMARK, {action, id, index, type: 'github', data: this.list})
         .catch((err) => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     }
   }
-}
+};
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

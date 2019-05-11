@@ -23,12 +23,12 @@
     </div>
 </template>
 <script>
-import Toolbar from '@/components/Toolbar'
-import Github from '@/components/Github'
-import Medium from '@/components/Medium'
-import Notes from '@/components/Notes'
-import { mapGetters } from 'vuex'
-import {FETCH_DATA_GITHUB, FETCH_DATA_MEDIUM} from '@/store/action.types'
+import Toolbar from '@/components/Toolbar';
+import Github from '@/components/Github';
+import Medium from '@/components/Medium';
+import Notes from '@/components/Notes';
+import { mapGetters } from 'vuex';
+import {FETCH_DATA_GITHUB, FETCH_DATA_MEDIUM} from '@/store/action.types';
 
 export default {
   name: 'Home',
@@ -47,7 +47,7 @@ export default {
         'BOOKMARKS',
         'SHARED WITH ME'
       ]
-    }
+    };
   },
   computed: {
     ...mapGetters('home', ['infiniteId', 'gitList', 'mediumList', 'active',
@@ -59,19 +59,19 @@ export default {
         this.$store
           .dispatch('home/' + FETCH_DATA_GITHUB, $state)
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       if (this.active === 'MEDIUM') {
         this.$store
           .dispatch('home/' + FETCH_DATA_MEDIUM, $state)
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
     }
   }
-}
+};
 </script>
 <style>
   .remove-anchor,
@@ -118,9 +118,11 @@ export default {
   .adopt-sticky {
     z-index: 0
   }
-  .fr-wrapper div:first-child {
+  .fr-wrapper div:first-child > a {
     left: 9999999px;
-    width: 100%;
     position: relative;
+  }
+  .fr-view {
+    margin-top: -16px;
   }
 </style>

@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import {GET_BOOKMARKS, GET_NOTES} from '../store/action.types'
+import { mapGetters } from 'vuex';
+import {GET_BOOKMARKS, GET_NOTES} from '../store/action.types';
 
 export default {
   name: 'Toolbar',
@@ -65,24 +65,24 @@ export default {
   },
   methods: {
     handleTabChange (event) {
-      this.$store.commit('home/setActive', event)
+      this.$store.commit('home/setActive', event);
       if (event.target.innerText === 'BOOKMARKS') {
         this.$store
           .dispatch('home/' + GET_BOOKMARKS)
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
       if (event.target.innerText === 'NOTES') {
         this.$store
           .dispatch('home/' + GET_NOTES)
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
     }
   }
-}
+};
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

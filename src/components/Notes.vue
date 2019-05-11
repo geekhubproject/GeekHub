@@ -92,10 +92,10 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
-import NotePreview from './NotePreview.vue'
-import {UPDATE_NOTE, CREATE_NOTE, DELETE_NOTE} from '../store/action.types'
-import { API_URL } from '@/common/config'
+import { mapGetters } from 'vuex';
+import NotePreview from './NotePreview.vue';
+import {UPDATE_NOTE, CREATE_NOTE, DELETE_NOTE} from '../store/action.types';
+import config from '@/common/config';
 
 export default {
   name: 'Notes',
@@ -107,7 +107,7 @@ export default {
       config: {
         placeholder: 'Edit Me',
         editorClass: 'vue-editor',
-        imageUploadURL: `${API_URL}/user/image`,
+        imageUploadURL: `${config.API_URL}/user/image`,
         imageUploadParam: 'image'
       },
       content: null,
@@ -121,35 +121,44 @@ export default {
       preview: false,
       previewTitle: null,
       previewData: null,
+      isInputHandlerAttached: false,
+      lastInputTime: null,
       timerTask: null
-    }
+    };
   },
   computed: {
     ...mapGetters('home', ['notes'])
   },
+  updated () {
+    if (!this.isInputHandlerAttached) {
+      const [editor] = document.getElementsByClassName('fr-element');
+      if (this.editor) editor.addEventListener('keydown', this.handleUserInput);
+      this.isInputHandlerAttached = true;
+    }
+  },
   methods: {
     toggleEditor () {
-      this.editor = !this.editor
-      this.editMode = false
-      this.id = null
-      this.title = 'Untitled'
-      this.content = null
-      if (this.editor) this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10)
+      this.editor = !this.editor;
+      this.editMode = false;
+      this.id = null;
+      this.title = 'Untitled';
+      this.content = null;
+      if (this.editor) this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10);
       else {
-        clearInterval(this.timerTask)
-        this.timerTask = null
+        clearInterval(this.timerTask);
+        this.timerTask = null;
       }
     },
     editNote (title, data, id) {
-      this.content = data
-      this.title = title
-      this.editMode = true
-      this.editor = true
-      this.id = id
-      this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10)
+      this.content = data;
+      this.title = title;
+      this.editMode = true;
+      this.editor = true;
+      this.id = id;
+      this.timerTask = setInterval(this.saveOnIdle, config.saveInterval);
     },
     clearNote () {
-      this.content = null
+      this.content = null;
     },
     saveNote () {
       if (this.editMode) {
@@ -157,19 +166,19 @@ export default {
           .dispatch('home/' + UPDATE_NOTE, {title: this.title, data: this.content, id: this.id})
           .then(data => this.updateSnackBar('Note Updated'))
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       } else {
         this.$store
           .dispatch('home/' + CREATE_NOTE, {title: this.title, data: this.content, id: this.id})
           .then(id => {
-            this.id = id
-            this.editMode = true
-            this.updateSnackBar('Note Created')
+            this.id = id;
+            this.editMode = true;
+            this.updateSnackBar('Note Created');
           })
           .catch((err) => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
     },
     deleteNote (id) {
@@ -177,20 +186,29 @@ export default {
         .dispatch('home/' + DELETE_NOTE, {id})
         .then(data => this.updateSnackBar('Note deleted'))
         .catch((err) => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     updateSnackBar (text) {
-      this.snackbar = true
-      this.snackContent = text
+      this.snackbar = true;
+      this.snackContent = text;
     },
     togglePreview (title, data) {
-      this.preview = !this.preview
-      this.previewTitle = title
-      this.previewData = data
+      this.preview = !this.preview;
+      this.previewTitle = title;
+      this.previewData = data;
+    },
+    handleUserInput (event) {
+      this.lastInputTime = new Date();
+    },
+    saveOnIdle () {
+      if (this.lastInputTime) {
+        this.saveNote();
+        this.lastInputTime = null;
+      }
     }
   }
-}
+};
 </script>
 <style>
   .editor-title {

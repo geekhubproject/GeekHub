@@ -31,8 +31,8 @@
 
 <script>
 
-import { mapFields } from 'vuex-map-fields'
-import { LOGIN } from '@/store/action.types'
+import { mapFields } from 'vuex-map-fields';
+import { LOGIN } from '@/store/action.types';
 
 export default {
   name: 'LoginForm',
@@ -46,10 +46,10 @@ export default {
     onSubmit (username, password) {
       this.$store
         .dispatch('login/' + LOGIN, { username, password })
-        .then(() => this.$router.push('/home'))
+        .then(() => this.$router.push('/home'));
     }
   }
-}
+};
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

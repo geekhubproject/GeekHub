@@ -1,5 +1,5 @@
-import APIService from '../../common/api.service'
-import _ from 'lodash'
+import APIService from '../../common/api.service';
+import _ from 'lodash';
 
 import {
   FETCH_DATA_GITHUB,
@@ -10,8 +10,8 @@ import {
   UPDATE_NOTE,
   CREATE_NOTE,
   DELETE_NOTE
-} from '../action.types'
-import { getField, updateField } from 'vuex-map-fields'
+} from '../action.types';
+import { getField, updateField } from 'vuex-map-fields';
 
 const state = {
   infiniteId: new Date(),
@@ -23,38 +23,38 @@ const state = {
   gitBookmarks: [],
   mediumBookmarks: [],
   notes: []
-}
+};
 
 const getters = {
   getField,
   infiniteId (state) {
-    return state.infiniteId + state.active
+    return state.infiniteId + state.active;
   },
   gitList (state) {
-    return state.gitList
+    return state.gitList;
   },
   gitNext (state) {
-    return state.gitNext
+    return state.gitNext;
   },
   mediumList (state) {
-    return state.mediumList
+    return state.mediumList;
   },
   mediumNext (state) {
-    return state.mediumNext
+    return state.mediumNext;
   },
   active (state) {
-    return state.active
+    return state.active;
   },
   gitBookmarks (state) {
-    return state.gitBookmarks
+    return state.gitBookmarks;
   },
   mediumBookmarks (state) {
-    return state.mediumBookmarks
+    return state.mediumBookmarks;
   },
   notes (state) {
-    return state.notes
+    return state.notes;
   }
-}
+};
 
 const actions = {
   [FETCH_DATA_GITHUB] (context, $state) {
@@ -62,15 +62,15 @@ const actions = {
       APIService.get(`github/top-stories/next/${context.getters.gitNext}`)
         .then(({ data }) => {
           if (data.docs.length) {
-            context.commit('setGitNext', 50)
-            const user = context.rootState.login.user
-            let userBookmarks
+            context.commit('setGitNext', 50);
+            const user = context.rootState.login.user;
+            let userBookmarks;
             if (user) {
               userBookmarks = user.bookmarks.map(bookmark => {
-                if (bookmark.type === 'github') return bookmark.id
-              })
+                if (bookmark.type === 'github') return bookmark.id;
+              });
             }
-            let docs = null
+            let docs = null;
             docs = data.docs.map(doc => ({
               ...doc,
               bookmark: userBookmarks ? userBookmarks.includes(doc._id) : false,
@@ -78,39 +78,39 @@ const actions = {
                 .split('/')
                 .slice(4, -1)
                 .join('/')}`
-            }))
-            context.commit('addGitdata', docs)
-            $state.loaded()
+            }));
+            context.commit('addGitdata', docs);
+            $state.loaded();
           } else {
-            $state.complete()
+            $state.complete();
           }
-          resolve(data)
+          resolve(data);
         })
         .catch((error) => {
-          console.log(error)
-        })
-    })
+          console.log(error);
+        });
+    });
   },
   [BOOKMARK] (context, data) {
     return new Promise(resolve => {
-      const {data: list, ...payload} = data
+      const {data: list, ...payload} = data;
       APIService.put(`user/bookmark`, payload)
         .then(() => {
-          list[payload.index].bookmark = !list[payload.index].bookmark
-          context.commit('setGitData', list)
-          resolve(data)
+          list[payload.index].bookmark = !list[payload.index].bookmark;
+          context.commit('setGitData', list);
+          resolve(data);
         })
         .catch((error) => {
-          console.log(error)
-        })
-    })
+          console.log(error);
+        });
+    });
   },
   [GET_BOOKMARKS] (context) {
     return new Promise((resolve, reject) => {
       APIService.get(`user/bookmark`)
         .then(({data}) => {
-          const gitBookmarks = []
-          const mediumBookmarks = []
+          const gitBookmarks = [];
+          const mediumBookmarks = [];
           data.result.map(record => {
             const obj = {
               ...record,
@@ -119,148 +119,148 @@ const actions = {
                 .split('/')
                 .slice(4, -1)
                 .join('/')}`
-            }
-            if (record.forks) gitBookmarks.push(obj)
-            else mediumBookmarks.push(obj)
-          })
+            };
+            if (record.forks) gitBookmarks.push(obj);
+            else mediumBookmarks.push(obj);
+          });
           if (!(_.isEmpty(gitBookmarks))) {
-            context.commit('setGitBookmarks', gitBookmarks)
+            context.commit('setGitBookmarks', gitBookmarks);
           }
           if (!(_.isEmpty(mediumBookmarks))) {
-            context.commit('setMediumBookmarks', mediumBookmarks)
+            context.commit('setMediumBookmarks', mediumBookmarks);
           }
         })
         .catch(err => {
-          console.log(err)
-          reject(err)
-        })
-    })
+          console.log(err);
+          reject(err);
+        });
+    });
   },
   [GET_NOTES] (context) {
     return new Promise((resolve, reject) => {
       APIService.get(`user/note`)
         .then(({data}) => {
-          context.commit('setNotes', data.notes)
+          context.commit('setNotes', data.notes);
         })
         .catch(err => {
-          console.log(err)
-          reject(err)
-        })
-    })
+          console.log(err);
+          reject(err);
+        });
+    });
   },
   [CREATE_NOTE] (context, data) {
     return new Promise((resolve, reject) => {
-      const {id, ...payload} = data
+      const {id, ...payload} = data;
       APIService.post(`user/note`, payload)
         .then(({data}) => {
-          context.commit('updateNotes', {...data, action: 'create'})
-          resolve(data.data.id)
+          context.commit('updateNotes', {...data, action: 'create'});
+          resolve(data.data.id);
         })
         .catch(err => {
-          console.log(err)
-          reject(err)
-        })
-    })
+          console.log(err);
+          reject(err);
+        });
+    });
   },
   [UPDATE_NOTE] (context, data) {
     return new Promise((resolve, reject) => {
       APIService.put(`user/note`, data)
         .then(({response}) => {
-          context.commit('updateNotes', {data, action: 'update'})
-          resolve(true)
+          context.commit('updateNotes', {data, action: 'update'});
+          resolve(true);
         })
         .catch(err => {
-          console.log(err)
-          reject(err)
-        })
-    })
+          console.log(err);
+          reject(err);
+        });
+    });
   },
   [DELETE_NOTE] (context, data) {
     return new Promise((resolve, reject) => {
       APIService.delete(`user/note/${data.id}`)
         .then(({resonse}) => {
-          context.commit('updateNotes', {data, action: 'delete'})
-          resolve(true)
+          context.commit('updateNotes', {data, action: 'delete'});
+          resolve(true);
         })
         .catch(err => {
-          console.log(err)
-          reject(err)
-        })
-    })
+          console.log(err);
+          reject(err);
+        });
+    });
   },
   [FETCH_DATA_MEDIUM] (context, $state) {
     return new Promise(resolve => {
       APIService.get(`medium/top-stories/next/${context.getters.mediumNext}`)
         .then(({ data }) => {
           if (data.docs.length) {
-            context.commit('setMediumNext', 50)
-            let docs = null
+            context.commit('setMediumNext', 50);
+            let docs = null;
             docs = data.docs.map(doc => ({
               ...doc,
               bookmark: false
-            }))
-            context.commit('addMediumData', docs)
-            $state.loaded()
+            }));
+            context.commit('addMediumData', docs);
+            $state.loaded();
           } else {
-            $state.complete()
+            $state.complete();
           }
-          resolve(data)
+          resolve(data);
         })
         .catch((error) => {
-          console.log(error)
-        })
-    })
+          console.log(error);
+        });
+    });
   }
-}
+};
 
 const mutations = {
   updateField,
   addGitdata (state, payload) {
-    state.gitList = state.gitList.concat(payload)
+    state.gitList = state.gitList.concat(payload);
   },
   setGitNext (state, count) {
-    state.gitNext = state.gitNext + count
+    state.gitNext = state.gitNext + count;
   },
   setGitData (state, data) {
-    state.gitList = data
+    state.gitList = data;
   },
   addMediumData (state, payload) {
-    state.mediumList = state.mediumList.concat(payload)
+    state.mediumList = state.mediumList.concat(payload);
   },
   setMediumNext (state, count) {
-    state.mediumNext = state.mediumNext + count
+    state.mediumNext = state.mediumNext + count;
   },
   setMediumData (state, data) {
-    state.mediumList = data
+    state.mediumList = data;
   },
   setActive (state, event) {
-    state.active = event.target.innerText
+    state.active = event.target.innerText;
   },
   setGitBookmarks (state, data) {
-    state.gitBookmarks = data
+    state.gitBookmarks = data;
   },
   setMediumBookmarks (state, data) {
-    state.mediumBookmarks = data
+    state.mediumBookmarks = data;
   },
   setNotes (state, notes) {
-    state.notes = notes
+    state.notes = notes;
   },
   updateNotes (state, payload) {
-    const {action, data} = payload
+    const {action, data} = payload;
     if (action === 'create') {
-      state.notes.push(data)
+      state.notes.push(data);
     } else if (action === 'update') {
       state.notes = state.notes.map(note => {
         if (note.id === data.id) {
-          return data
+          return data;
         }
-        return note
-      })
+        return note;
+      });
     } else {
-      state.notes = state.notes.filter(note => note.id !== data.id)
+      state.notes = state.notes.filter(note => note.id !== data.id);
     }
   }
-}
+};
 
 export default {
   namespaced: true,
@@ -268,4 +268,4 @@ export default {
   actions,
   mutations,
   getters
-}
+};

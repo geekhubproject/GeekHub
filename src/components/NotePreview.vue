@@ -39,15 +39,15 @@ export default {
   data () {
     return {
       dialog: true
-    }
+    };
   },
   methods: {
     closePreview () {
-      this.dialog = false
-      this.$emit('closePreview')
+      this.dialog = false;
+      this.$emit('closePreview');
     }
   }
-}
+};
 </script>
 
 <style scoped>

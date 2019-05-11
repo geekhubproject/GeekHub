@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import login from './modules/login.module'
-import home from './modules/home.module'
+import login from './modules/login.module';
+import home from './modules/home.module';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
     login,
     home
   }
-})
+});

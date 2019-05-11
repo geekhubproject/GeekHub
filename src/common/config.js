@@ -1,3 +1,6 @@
-export const API_URL = 'https://geekhub-node.herokuapp.com'
-// export const API_URL = 'http://localhost:3000'
-export default API_URL
+const config = {
+  API_URL: 'https://geekhub-node.herokuapp.com',
+  saveInterval: 5000
+};
+
+export default config;
