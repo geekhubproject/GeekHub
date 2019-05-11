@@ -130,9 +130,9 @@ export default {
     ...mapGetters('home', ['notes'])
   },
   updated () {
-    if (!this.isInputHandlerAttached) {
+    if (!this.isInputHandlerAttached && this.editor) {
       const [editor] = document.getElementsByClassName('fr-element');
-      if (this.editor) editor.addEventListener('keydown', this.handleUserInput);
+      editor.addEventListener('keydown', this.handleUserInput);
       this.isInputHandlerAttached = true;
     }
   },
@@ -202,7 +202,7 @@ export default {
       this.lastInputTime = new Date();
     },
     saveOnIdle () {
-      if (this.lastInputTime) {
+      if (this.lastInputTime && ((new Date() - this.lastInputTime) > config.saveInterval)) {
         this.saveNote();
         this.lastInputTime = null;
       }

@@ -122,7 +122,4 @@ export default {
     left: 9999999px;
     position: relative;
   }
-  .fr-view {
-    margin-top: -16px;
-  }
 </style>
