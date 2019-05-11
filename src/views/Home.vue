@@ -122,4 +122,7 @@ export default {
     left: 9999999px;
     position: relative;
   }
+  .fr-box.fr-basic .fr-element {
+    padding-top: 0 !important;
+  }
 </style>

@@ -121,7 +121,7 @@ export default {
       preview: false,
       previewTitle: null,
       previewData: null,
-      isInputHandlerAttached: false,
+      isEditorHandlerAttached: false,
       lastInputTime: null,
       timerTask: null
     };
@@ -130,10 +130,8 @@ export default {
     ...mapGetters('home', ['notes'])
   },
   updated () {
-    if (!this.isInputHandlerAttached && this.editor) {
-      const [editor] = document.getElementsByClassName('fr-element');
-      editor.addEventListener('keydown', this.handleUserInput);
-      this.isInputHandlerAttached = true;
+    if (this.editor && !this.isEditorHandlerAttached) {
+      this.addEditListener();
     }
   },
   methods: {
@@ -143,11 +141,7 @@ export default {
       this.id = null;
       this.title = 'Untitled';
       this.content = null;
-      if (this.editor) this.timerTask = setInterval(this.saveNote, 60 * 1000 * 10);
-      else {
-        clearInterval(this.timerTask);
-        this.timerTask = null;
-      }
+      if (!this.editor) this.removeEditListener();
     },
     editNote (title, data, id) {
       this.content = data;
@@ -155,7 +149,6 @@ export default {
       this.editMode = true;
       this.editor = true;
       this.id = id;
-      this.timerTask = setInterval(this.saveOnIdle, config.saveInterval);
     },
     clearNote () {
       this.content = null;
@@ -197,6 +190,19 @@ export default {
       this.preview = !this.preview;
       this.previewTitle = title;
       this.previewData = data;
+    },
+    addEditListener () {
+      const [editor] = document.getElementsByClassName('fr-element');
+      editor.addEventListener('keydown', this.handleUserInput);
+      this.timerTask = setInterval(this.saveOnIdle, config.saveInterval);
+      this.isEditorHandlerAttached = true;
+    },
+    removeEditListener () {
+      const [editor] = document.getElementsByClassName('fr-element');
+      editor.removeEventListener('keydown', this.handleUserInput);
+      clearInterval(this.timerTask);
+      this.timerTask = null;
+      this.isEditorHandlerAttached = false;
     },
     handleUserInput (event) {
       this.lastInputTime = new Date();
