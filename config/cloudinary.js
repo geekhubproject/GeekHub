@@ -10,7 +10,6 @@ cloudinary.config({
 const storage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'images',
-  allowedFormats: ['jpg', 'png'],
-  transformation: [{ width: 500, height: 500, crop: 'limit' }]
+  allowedFormats: ['jpg', 'png']
 });
 module.exports =  multer({ storage: storage });
