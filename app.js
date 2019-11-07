@@ -25,7 +25,9 @@ app.use(session({
     expires: (() => {
       const d = new Date();
       return d.setFullYear(d.getFullYear() + 5)
-    })()
+    })(),
+    secure: true,
+    sameSite: 'none'
   },
   saveUninitialized: false,
 }));
