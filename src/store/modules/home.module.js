@@ -63,7 +63,7 @@ const actions = {
         .then(({ data }) => {
           if (data.docs.length) {
             context.commit('setGitNext', 50);
-            const user = context.rootState.login.user;
+            const user = context.rootState.login.userData;
             let userBookmarks;
             if (user) {
               userBookmarks = user.bookmarks.map(bookmark => {

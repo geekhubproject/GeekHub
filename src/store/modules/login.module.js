@@ -16,6 +16,7 @@ const state = {
     username: '',
     password: ''
   },
+  userData: JwtService.getToken() && JSON.parse(JwtService.getToken()),
   isAuthenticated: !!JwtService.getToken()
 };
 
@@ -34,7 +35,7 @@ const actions = {
     return new Promise(resolve => {
       APIService.post('user/login', credentials)
         .then(({ data }) => {
-          context.commit(SET_AUTH, data);
+          context.commit(SET_AUTH, JSON.stringify(data));
           resolve(data);
         })
         .catch(({ response }) => {
@@ -100,7 +101,7 @@ const mutations = {
     state.isAuthenticated = true;
     state.user = user;
     state.errors = {};
-    JwtService.saveToken(state.user.token);
+    JwtService.saveToken(user);
   },
   [PURGE_AUTH] (state) {
     state.isAuthenticated = false;
