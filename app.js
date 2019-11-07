@@ -18,18 +18,12 @@ const passportLocal = require('./modules/common/auth/passport-local');
 const app = express();
 
 app.use(session({
-  genid: (req) => {
-    console.log('Inside the session middleware');
-    console.log(req.sessionID);
-    return uuid(); // use UUIDs for session IDs
-  },
-  store: new MongoStore({mongooseConnection: mongoose.connection, ttl: 24 * 60 * 60 * 1000}),
+  store: new MongoStore({mongooseConnection: mongoose.connection}),
   secret: 'keyboard cat',
-  resave: true,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000
-  },
-  saveUninitialized: true,
+  rolling: true,
+  saveUninitialized: false,
+  resave: false,
+  cookie: {maxAge: 2147483647},
 }));
 
 app.use(logger('dev'));
