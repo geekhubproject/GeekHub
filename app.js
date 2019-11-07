@@ -23,7 +23,7 @@ app.use(session({
   rolling: true,
   saveUninitialized: false,
   resave: false,
-  cookie: {maxAge: 2147483647, sameSite: 'none', secure: true},
+  cookie: {maxAge: 2147483647, sameSite: 'none', secure: false},
 }));
 
 app.use(logger('dev'));
