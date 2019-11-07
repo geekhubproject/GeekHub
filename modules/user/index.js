@@ -14,7 +14,7 @@ const login = (req, res) => {
       /** assigns payload to req.user */
       req.login(user, (error) => {
         if (error) res.status(400).json({error});
-        else res.status(200).json(req.user);
+        else req.session.save(() => res.status(200).json(req.user));
       });
     }
   )(req, res);

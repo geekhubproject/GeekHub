@@ -20,10 +20,14 @@ const app = express();
 app.use(session({
   store: new MongoStore({mongooseConnection: mongoose.connection}),
   secret: 'keyboard cat',
-  rolling: true,
-  saveUninitialized: false,
   resave: false,
-  cookie: {maxAge: 2147483647, sameSite: 'none', secure: false},
+  cookie: {
+    expires: (() => {
+      const d = new Date();
+      return d.setFullYear(d.getFullYear() + 5)
+    })()
+  },
+  saveUninitialized: false,
 }));
 
 app.use(logger('dev'));
