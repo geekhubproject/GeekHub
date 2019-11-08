@@ -27,7 +27,7 @@ app.use(session({
       return d.setFullYear(d.getFullYear() + 5)
     })(),
     secure: true,
-    sameSite: 'none'
+    sameSite: false
   },
   saveUninitialized: false,
 }));
