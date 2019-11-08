@@ -26,8 +26,10 @@ app.use(session({
       const d = new Date();
       return d.setFullYear(d.getFullYear() + 5)
     })(),
-    secure: true,
-    sameSite: 'none'
+    secure: false,
+    sameSite: false,
+    httpOnly: false,
+    domain: 'geek-hub.herokuapp.com'
   },
   saveUninitialized: false,
 }));

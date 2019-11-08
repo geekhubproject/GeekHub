@@ -12,10 +12,7 @@ const login = (req, res) => {
     (error, user, info) => {
       if (error || !user) res.status(400).json(info);
       /** assigns payload to req.user */
-      req.login(user, (error) => {
-        if (error) res.status(400).json({error});
-        else req.session.save(() => res.status(200).json(req.user));
-      });
+      else res.status(200).json(req.user);
     }
   )(req, res);
 };
