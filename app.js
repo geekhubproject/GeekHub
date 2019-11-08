@@ -28,8 +28,7 @@ app.use(session({
     })(),
     secure: false,
     sameSite: false,
-    httpOnly: false,
-    domain: 'geek-hub.herokuapp.com'
+    httpOnly: false
   },
   saveUninitialized: false,
 }));
