@@ -33,6 +33,12 @@ app.use(session({
 }));
 
 app.use(logger('dev'));
+app.use(bodyParser.urlencoded({
+    limit: '5mb',
+    parameterLimit: 100000,
+    extended: false 
+}));
+app.use(bodyParser.json({ limit: '50mb' }))
 app.use(cors({
   origin: ['http://geek-hub.herokuapp.com', 'https://geek-hub.herokuapp.com', 'http://localhost:8080'],
   credentials: true
@@ -43,7 +49,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json({ limit: '50mb' }))
 
 
 // app.use('/', indexRouter);
