@@ -33,12 +33,6 @@ app.use(session({
 }));
 
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({
-    limit: '5mb',
-    parameterLimit: 100000,
-    extended: false 
-}));
-app.use(bodyParser.json({ limit: '50mb' }))
 app.use(cors({
   origin: ['http://geek-hub.herokuapp.com', 'https://geek-hub.herokuapp.com', 'http://localhost:8080'],
   credentials: true
